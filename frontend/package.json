@@ -12,6 +12,7 @@
     "@aptos-labs/ts-sdk": "^1.39.0",
     "@aptos-labs/wallet-adapter-ant-design": "^5.3.7",
     "@aptos-labs/wallet-adapter-react": "^7.2.7",
+    "dotenv": "^17.2.3",
     "next": "16.1.1",
     "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "19.2.3",
