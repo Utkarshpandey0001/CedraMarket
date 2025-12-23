@@ -1,0 +1,43 @@
+# [package]
+# name = "cedramarket"
+# version = "1.0.0"
+# authors = []
+
+# [addresses]
+# marketplace ="0x74edfb85325f89d544617ad15be38b18523d58783a068bf1bb40d123ac572b37"
+# cedra = "0x1"
+
+# [dev-addresses]
+
+# [dependencies.AptosFramework]
+# git = "https://github.com/aptos-labs/aptos-framework.git"
+# rev = "mainnet"
+# subdir = "aptos-framework"
+
+# [dev-dependencies]
+
+
+
+# [package]
+# name = "cedramarket"
+# version = "1.0.0"
+
+[addresses]
+# Added '0' to the front to fix the "Odd number of digits" error
+marketplace = "_"
+std = "0x1"
+aptos_framework = "0x1"
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-framework.git"
+rev = "mainnet"
+subdir = "aptos-framework"
+
+
+
+
+[package]
+name = "cedramarket_v2" # Change this from 'cedramarket' to 'cedramarket_v2'
+version = "1.0.0"
+upgrade_policy = "compatible"
+
