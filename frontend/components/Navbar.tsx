@@ -31,6 +31,9 @@ export function NavBar() {
           >
             Sell Asset
           </Link>
+          <Link href="/my-assets" className="text-gray-500 hover:text-gray-900 font-medium">
+            My Assets
+          </Link>
         </div>
 
         {/* Wallet Section */}
