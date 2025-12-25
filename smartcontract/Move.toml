@@ -37,7 +37,7 @@ subdir = "aptos-framework"
 
 
 [package]
-name = "cedramarket_final" # Change this from 'cedramarket' to 'cedramarket_v2'
+name = "cedramarket_v6" # Change this from 'cedramarket' to 'cedramarket_v2'
 version = "1.0.0"
 upgrade_policy = "compatible"
 

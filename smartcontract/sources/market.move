@@ -1,4 +1,4 @@
-module marketplace::market_v5 {
+module marketplace::market_v6 { // <--- V6
     use std::string::String;
     use std::vector;
     use std::signer;
@@ -32,6 +32,7 @@ module marketplace::market_v5 {
         move_to(admin, listings);
     }
 
+    // 1. MINTING
     public entry fun list_item_with_uri(
         seller: &signer,
         name: String,
@@ -52,6 +53,7 @@ module marketplace::market_v5 {
         });
     }
 
+    // 2. BUYING (Atomic Swap)
     public entry fun buy_item(buyer: &signer, listing_id: u64) acquires Listings, MyItems {
         let listings = borrow_global_mut<Listings>(@marketplace);
         let items = &mut listings.items;
@@ -64,10 +66,8 @@ module marketplace::market_v5 {
             if (item.id == listing_id) {
                 let listing = vector::remove(items, i);
                 
-                // 1. Pay Seller
                 coin::transfer<AptosCoin>(buyer, listing.seller, listing.price);
 
-                // 2. Transfer Asset to Buyer
                 let buyer_addr = signer::address_of(buyer);
                 if (!exists<MyItems>(buyer_addr)) {
                     move_to(buyer, MyItems { items: vector::empty() });
@@ -75,7 +75,37 @@ module marketplace::market_v5 {
                 
                 let my_items = borrow_global_mut<MyItems>(buyer_addr);
                 vector::push_back(&mut my_items.items, listing.asset);
+                break
+            };
+            i = i + 1;
+        };
+    }
 
+    // 3. RESELLING (The New Logic)
+    public entry fun resell_item(seller: &signer, item_id: u64, price: u64) acquires MyItems, Listings {
+        let seller_addr = signer::address_of(seller);
+        let my_items = borrow_global_mut<MyItems>(seller_addr);
+        let items = &mut my_items.items;
+        
+        let len = vector::length(items);
+        let i = 0;
+        
+        while (i < len) {
+            let item = vector::borrow(items, i);
+            
+            // Find the item in user's wallet
+            if (item.id == item_id) {
+                // Remove from User's Wallet
+                let asset = vector::remove(items, i);
+                
+                // Add back to Market Listings
+                let listings = borrow_global_mut<Listings>(@marketplace);
+                vector::push_back(&mut listings.items, Listing {
+                    id: asset.id, 
+                    asset,
+                    price,
+                    seller: seller_addr,
+                });
                 break
             };
             i = i + 1;

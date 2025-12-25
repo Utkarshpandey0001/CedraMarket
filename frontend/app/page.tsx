@@ -29,7 +29,7 @@ export default function Home() {
       const resource = await aptos.getAccountResource({
        // @ts-ignore
         accountAddress: MODULE_ADDRESS,
-        resourceType: `${MODULE_ADDRESS}::market_v5::Listings`
+        resourceType: `${MODULE_ADDRESS}::market_v6::Listings`
       });
       // @ts-ignore
       setListings(resource.items);
@@ -51,7 +51,7 @@ export default function Home() {
     try {
       const response = await signAndSubmitTransaction({
         data: {
-          function: `${MODULE_ADDRESS}::market_v5::buy_item`,
+          function: `${MODULE_ADDRESS}::market_v6::buy_item`,
           typeArguments: [],
           functionArguments: [listingId],
         }

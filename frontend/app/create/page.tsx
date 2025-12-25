@@ -100,7 +100,7 @@ export default function CreateListingPage() {
       setStatusMsg("Minting NFT on Aptos...");
       const response = await signAndSubmitTransaction({
         data: {
-          function: `${MODULE_ADDRESS}::market_v5::list_item_with_uri`,
+          function: `${MODULE_ADDRESS}::market_v6::list_item_with_uri`,
           typeArguments: [], 
           functionArguments: [
             name, 
