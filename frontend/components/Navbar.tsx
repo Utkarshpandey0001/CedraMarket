@@ -29,7 +29,7 @@ export function NavBar() {
             href="/create" 
             className={`text-sm font-medium transition-colors ${pathname === "/create" ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
           >
-            Sell Asset
+            Create Asset
           </Link>
           <Link href="/my-assets" className="text-gray-500 hover:text-gray-900 font-medium">
             My Assets

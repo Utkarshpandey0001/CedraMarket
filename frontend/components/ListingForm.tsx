@@ -6,7 +6,7 @@ import { MODULE_ADDRESS } from "../app/constant";
 
 const aptos = new Aptos(new AptosConfig({ network: Network.DEVNET }));
 
-// Define the interface for the props passed from page.tsx
+
 interface ListingFormProps {
   onRefresh: () => void;
 }
@@ -23,18 +23,18 @@ export const ListingForm = ({ onRefresh }: ListingFormProps) => {
     try {
       const response = await signAndSubmitTransaction({
         data: {
-          // CRITICAL: Must be 'market_v2' to match your contract
+          
           function: `${MODULE_ADDRESS}::market_v2::list_item_with_name`,
           typeArguments: [], 
-          // Arguments: Name (String) and Price (u64)
+          
           functionArguments: [name, (parseFloat(price) * 100_000_000).toString()],
         }
       });
       
-      // WAIT for the blockchain to finish
+     
       await aptos.waitForTransaction({ transactionHash: response.hash });
       
-      // CALL the parent function to refresh the market grid
+      
       onRefresh(); 
       alert("Asset listed successfully!");
       setName("");

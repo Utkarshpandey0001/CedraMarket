@@ -6,7 +6,7 @@ import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import { MODULE_ADDRESS } from "../constant"; 
 import { useRouter } from "next/navigation";
 
-// Use environment variable for safety
+
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT; 
 
 const aptos = new Aptos(new AptosConfig({ network: Network.DEVNET }));
@@ -130,7 +130,7 @@ export default function CreateListingPage() {
         <div className="space-y-6">
           <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Create Asset</h2>
           <div className="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-xl">
-            <button onClick={() => setActiveTab("AI")} className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${activeTab === "AI" ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-white shadow-sm" : "text-gray-500 dark:text-gray-400"}`}>✨ AI Generator</button>
+            <button onClick={() => setActiveTab("AI")} className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${activeTab === "AI" ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-white shadow-sm" : "text-gray-500 dark:text-gray-400"}`}>AI Generator</button>
             <button onClick={() => setActiveTab("UPLOAD")} className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${activeTab === "UPLOAD" ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-white shadow-sm" : "text-gray-500 dark:text-gray-400"}`}>📁 Upload File</button>
           </div>
 
@@ -163,7 +163,7 @@ export default function CreateListingPage() {
               <form className="space-y-6" onSubmit={handleCreateListing}>
                 <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Asset Name</label><input type="text" required className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-blue-500" value={name} onChange={(e) => setName(e.target.value)} /></div>
                 <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (APT)</label><input type="number" step="0.01" required className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-blue-500" value={price} onChange={(e) => setPrice(e.target.value)} /></div>
-                <div className="pt-4"><button type="submit" disabled={isMinting || (activeTab === "AI" && !aiImageUrl) || (activeTab === "UPLOAD" && !selectedFile)} className="w-full py-4 bg-gray-900 dark:bg-white dark:text-gray-900 text-white font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50">{isMinting ? statusMsg : "Mint & List NFT 🚀"}</button></div>
+                <div className="pt-4"><button type="submit" disabled={isMinting || (activeTab === "AI" && !aiImageUrl) || (activeTab === "UPLOAD" && !selectedFile)} className="w-full py-4 bg-gray-900 dark:bg-white dark:text-gray-900 text-white font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50">{isMinting ? statusMsg : "Mint & List NFT"}</button></div>
               </form>
             </div>
         </div>
