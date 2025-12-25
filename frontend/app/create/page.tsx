@@ -124,7 +124,8 @@ export default function CreateListingPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[90vh] px-4 py-8">
+    
+   <div className="flex items-center justify-center min-h-[90vh] px-4 pt-32 pb-12">
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
         
         <div className="space-y-6">

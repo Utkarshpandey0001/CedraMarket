@@ -72,7 +72,7 @@ export default function MyAssetsPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6">
+    <div className="min-h-screen pt-32 pb-12 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-12">
           <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">My Collection</h1>

@@ -12,11 +12,14 @@
     "@aptos-labs/ts-sdk": "^1.39.0",
     "@aptos-labs/wallet-adapter-ant-design": "^5.3.7",
     "@aptos-labs/wallet-adapter-react": "^7.2.7",
+    "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
+    "framer-motion": "^12.23.26",
     "next": "16.1.1",
     "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
