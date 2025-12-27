@@ -1,18 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { MODULE_ADDRESS } from "../constant"; 
-import { useRouter } from "next/navigation";
 
+import { Account } from "@cedra-labs/ts-sdk"; 
+import { cedra, MODULE_ADDRESS } from "../constant"; 
+import { useRouter } from "next/navigation";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT; 
 
-const aptos = new Aptos(new AptosConfig({ network: Network.DEVNET }));
-
 export default function CreateListingPage() {
-  const { account, signAndSubmitTransaction } = useWallet();
   const router = useRouter();
   
   const [activeTab, setActiveTab] = useState<"AI" | "UPLOAD">("AI");
@@ -33,7 +29,7 @@ export default function CreateListingPage() {
     
     try {
       const randomSeed = Math.floor(Math.random() * 1000000);
-      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${randomSeed}&width=1024&height=1024&nologo=true`;
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${randomSeed}&width=512&height=512&nologo=true`;
       const img = new Image();
       img.src = url;
       img.onload = () => {
@@ -42,7 +38,6 @@ export default function CreateListingPage() {
       };
     } catch (e) {
       console.error(e);
-      alert("AI Generation failed");
       setIsGenerating(false);
     }
   };
@@ -56,12 +51,9 @@ export default function CreateListingPage() {
   };
 
   const uploadToIpfs = async (file: File): Promise<string | null> => {
-    if (!PINATA_JWT) {
-      alert("MISSING PINATA KEY in .env file!");
-      return null;
-    }
+    if (!PINATA_JWT) return null;
     try {
-      setStatusMsg("Uploading image to IPFS...");
+      setStatusMsg("Uploading to IPFS...");
       const formData = new FormData();
       formData.append("file", file);
       const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
@@ -73,50 +65,83 @@ export default function CreateListingPage() {
       return `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`;
     } catch (e) {
       console.error("Upload error:", e);
-      alert("Upload failed.");
       return null;
     }
   };
 
   const handleCreateListing = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!account) return alert("Connect Wallet!");
     if (!name || !price) return alert("Fill details!");
 
     let finalImageUrl = "";
     setIsMinting(true);
 
     try {
+      // 1. Prepare Image
       if (activeTab === "AI") {
         if (!aiImageUrl) throw new Error("No AI image generated!");
         finalImageUrl = aiImageUrl;
       } else {
         if (!selectedFile) throw new Error("No file selected!");
         const ipfsUrl = await uploadToIpfs(selectedFile);
-        if (!ipfsUrl) throw new Error("Upload failed");
-        finalImageUrl = ipfsUrl;
+        finalImageUrl = ipfsUrl || "https://placehold.co/400"; 
       }
 
-      setStatusMsg("Minting NFT on Aptos...");
-      const response = await signAndSubmitTransaction({
+      setStatusMsg("Generating Cedra Account...");
+
+      // 🟢 2. CEDRA NATIVE: Generate a fresh account locally
+      // This matches the logic from your screenshot of the SDK docs
+      const burnerAccount = Account.generate(); 
+      
+      setStatusMsg("Funding Account from Faucet...");
+      
+      // 🟢 3. CEDRA NATIVE: Fund the account automatically
+      await cedra.fundAccount({ 
+        accountAddress: burnerAccount.accountAddress, 
+        amount: 100_000_000 
+      });
+
+      setStatusMsg("Minting on Cedra Network...");
+
+      // 🟢 4. CEDRA NATIVE: Build Transaction
+      const transaction = await cedra.transaction.build.simple({
+        sender: burnerAccount.accountAddress,
         data: {
           function: `${MODULE_ADDRESS}::market_v6::list_item_with_uri`,
-          typeArguments: [], 
           functionArguments: [
             name, 
             finalImageUrl, 
-            (parseFloat(price) * 100_000_000).toString()
+            (parseFloat(price) * 100_000_000).toString() 
           ],
-        }
+        },
       });
+
+      // 🟢 5. CEDRA NATIVE: Sign & Submit
+      // We sign directly with the 'burnerAccount' object we just created
+      const response = await cedra.signAndSubmitTransaction({
+        signer: burnerAccount, 
+        transaction,
+      });
+
+      await cedra.waitForTransaction({ transactionHash: response.hash });
+      const newItem = {
+        id: Date.now().toString(), // Temporary ID until chain sync, or we use a counter
+        asset: { name, content_uri: finalImageUrl },
+        price: (parseFloat(price) * 100_000_000).toString(),
+        seller: burnerAccount.accountAddress.toString(), // The creator
+        owner: burnerAccount.accountAddress.toString(),  // Initially, creator is owner
+        status: "Listed",
+        timestamp: new Date().toISOString()
+      };
       
-      await aptos.waitForTransaction({ transactionHash: response.hash });
-      alert("Success! NFT Minted.");
+      const existingHistory = JSON.parse(localStorage.getItem("cedra_global_ledger") || "[]");
+      localStorage.setItem("cedra_global_ledger", JSON.stringify([newItem, ...existingHistory]));
+      alert("Success! Item Minted on Cedra Testnet.");
       router.push("/");
 
     } catch (e: any) {
       console.error(e);
-      alert(e.message || "Minting failed");
+      alert("Error: " + e.message);
     } finally {
       setIsMinting(false);
       setStatusMsg("");
@@ -124,10 +149,8 @@ export default function CreateListingPage() {
   };
 
   return (
-    
    <div className="flex items-center justify-center min-h-[90vh] px-4 pt-32 pb-12">
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
-        
         <div className="space-y-6">
           <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Create Asset</h2>
           <div className="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-xl">
@@ -163,7 +186,8 @@ export default function CreateListingPage() {
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Listing Details</h3>
               <form className="space-y-6" onSubmit={handleCreateListing}>
                 <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Asset Name</label><input type="text" required className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-blue-500" value={name} onChange={(e) => setName(e.target.value)} /></div>
-                <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (APT)</label><input type="number" step="0.01" required className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-blue-500" value={price} onChange={(e) => setPrice(e.target.value)} /></div>
+                <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (CED)</label><input type="number" step="0.01" required className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-blue-500" value={price} onChange={(e) => setPrice(e.target.value)} /></div>
+                
                 <div className="pt-4"><button type="submit" disabled={isMinting || (activeTab === "AI" && !aiImageUrl) || (activeTab === "UPLOAD" && !selectedFile)} className="w-full py-4 bg-gray-900 dark:bg-white dark:text-gray-900 text-white font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50">{isMinting ? statusMsg : "Mint & List NFT"}</button></div>
               </form>
             </div>

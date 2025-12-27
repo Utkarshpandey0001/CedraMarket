@@ -12,6 +12,7 @@
     "@aptos-labs/ts-sdk": "^1.39.0",
     "@aptos-labs/wallet-adapter-ant-design": "^5.3.7",
     "@aptos-labs/wallet-adapter-react": "^7.2.7",
+    "@cedra-labs/ts-sdk": "^2.2.8",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.26",

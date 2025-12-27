@@ -34,6 +34,9 @@ export function NavBar() {
           <Link href="/my-assets" className="text-gray-500 hover:text-gray-900 font-medium">
             My Assets
           </Link>
+          <Link href="/ledger" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">
+            Live Ledger
+          </Link>
         </div>
 
         {/* Wallet Section */}

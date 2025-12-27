@@ -1,16 +1,11 @@
-// export const MODULE_ADDRESS = process.env.NEXT_PUBLIC_MODULE_ADDRESS;
+
+import { Cedra, CedraConfig, Network } from "@cedra-labs/ts-sdk";
+
+const config = new CedraConfig({
+  network: Network.TESTNET, 
+});
+
+export const cedra = new Cedra(config);
 
 
-// export const GENERIC_TYPE = `${MODULE_ADDRESS}::market_v6::MarketItem`;
-
-
-
-
-
-
-
-export const MODULE_ADDRESS = 
-  process.env.NEXT_PUBLIC_MODULE_ADDRESS || 
-  "0x2af00cec9331ad1402032cf0612b904ed51eb2d7c401e38011c7e6b08cffc8f8"; 
-
-export const GENERIC_TYPE = `${MODULE_ADDRESS}::market_v6::MarketItem`;
+export const MODULE_ADDRESS = "0xea36baf8fde3f37627b3e9c1b95f691adaa27c39d58c55d64f540b92613999e2";
