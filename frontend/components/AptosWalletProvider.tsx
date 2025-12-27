@@ -10,7 +10,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       autoConnect={true}
       dappConfig={{ 
         network: Network.DEVNET,
-        aptosConnect: { dappName: "CederaMarket" } 
+        aptosConnect: { dappName: "CedraNexus" } 
       }}
       onError={(error) => console.log("Wallet error", error)}
     >

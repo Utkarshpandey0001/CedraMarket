@@ -14,7 +14,7 @@ export function NavBar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg group-hover:bg-blue-700 transition">C</div>
-          <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Cedera Market</h1>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">CedraNexus</h1>
         </Link>
 
         {/* Navigation Links */}
