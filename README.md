@@ -1,61 +1,61 @@
-# ⚡ Cedera Market
+# 🤖 Cedra Market: The Frictionless GenAI Marketplace
 
-**A GenAI-native NFT marketplace with a fully circular economy on Aptos.**
+> **Mint, Trade, and Track AI Artifacts with Zero Wallet Friction.**
+> Built for the **Cedra Builder Forge** Hackathon.
 
-## 💡 What is it?
-Cedera Market isn't just a static gallery. It's a complete ecosystem where users can generate assets using AI, mint them to IPFS, and trade them on a live secondary market.
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://cedra-market.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/💻_Source_Code-GitHub-blue?style=for-the-badge&logo=github)](https://github.com/Utkarshpandey0001/CedraMarket.git)
 
-Unlike standard demos, this project implements a **full "Escrow" trading model**—meaning assets are atomically swapped for APT, and users can flip (resell) items they've bought to keep the economy moving.
+![Project Banner](https://via.placeholder.com/1200x400?text=Cedra+Builder+Forge+Project)
+
+## 🚀 The Problem
+Traditional Web3 marketplaces create massive friction for new users:
+1.  **Onboarding Hell:** Users must install extensions, manage keys, and fund wallets just to *try* an app.
+2.  **Static Content:** Most NFTs are just uploaded files, not generated interactively on-chain.
+3.  **Broken UX:** Every action requires a popup confirmation, breaking immersion.
+
+## ⚡ Our Solution: "Burner Mode"
+Cedra Market introduces a **Wallet-Optional Architecture** powered by the Cedra TS SDK.
+* **Instant Onboarding:** The app generates temporary "Burner Wallets" in the background for every user action.
+* **Auto-Funding:** New wallets are automatically funded via the Testnet Faucet.
+* **Result:** Users can Mint, Buy, and Sell instantly—**no popup approvals required.**
+
+---
 
 ## 🔥 Key Features
 
-### 1. 🤖 GenAI & IPFS Minting
-* **Dual-Mode Creation:** Users can generate art on the fly using **Pollinations AI** or upload their own custom files.
-* **Decentralized Storage:** All assets are pinned to **IPFS via Pinata** before minting, ensuring true ownership and permanence.
+### 1. 🎨 AI-Native Minting
+* Integrated **Generative AI** engine directly in the minting flow.
+* Type a prompt → Generate Art → Mint to Chain in one click.
+* Metadata pinned to **IPFS** via Pinata for decentralized permanence.
 
-### 2. 💸 Circular Economy (Buy, Sell, Flip)
-* **Atomic Swaps:** Smart contract (`market_v6`) handles immediate asset-for-money transfers.
-* **Resell Mechanics:** It’s not a one-way street. Once you buy an asset, it moves to your "My Assets" wallet. You can then **re-list it at a new price** to the global marketplace, enabling a true trading environment.
+### 2. 👻 Ghost Buyer & "Key Ring" System
+* **One-Click Buy:** Clicking "Buy" creates a fresh wallet, funds it, and executes the purchase instantly.
+* **Key Ring Persistence:** The app securely saves the private keys of these "Ghost Wallets" to local storage.
+* **Resell Capability:** Because keys are saved, users can easily resell items they bought, proving full ownership transfer without managing a seed phrase.
 
-### 3. 🔍 Real-Time Command Center
-We built a robust client-side filtering engine to handle marketplace discovery without needing an indexer.
-* **Price Filter:** Set Min/Max APT ranges to find deals.
-* **Seller Search:** Paste a specific wallet address to see a creator's entire portfolio.
-* **Live Search:** Filter assets by name/metadata instantly as you type.
-* **Sorting:** Toggle between "Price: Low to High" and "High to Low".
+### 3. 📊 Live Ledger & Traceability
+* **Dual-View Ledger:** Tracks both the **Seller** (Beneficiary) and the **Escrow Holder** (Marketplace Module).
+* **Real-Time Status:** Merges live blockchain data with local history to show accurate "Listed" vs "Sold" statuses.
+* **Smart History:** The "My Assets" sidebar automatically remembers every wallet address used in the session.
 
-## 🛠️ Tech Stack
-* **Blockchain:** Aptos (Move Language)
-* **Contract:** Custom `market_v6` module (Escrow & Resell logic)
-* **Frontend:** Next.js 14, TypeScript, Tailwind CSS
-* **Storage:** Pinata (IPFS)
-* **AI Engine:** Pollinations.ai API
-* **Wallet:** Aptos Wallet Adapter (Petra supported)
+---
 
-## ⚙️ How it Works
-1.  **Mint:** User types a prompt -> AI generates image -> Uploads to IPFS -> Minted on Aptos.
-2.  **List:** The NFT is transferred from the user to the Marketplace Contract (Escrow).
-3.  **Buy:** A buyer pays APT -> Contract sends APT to seller -> Contract transfers NFT to Buyer's `MyItems` resource.
-4.  **Resell:** Buyer sets a new price -> Contract pulls NFT from `MyItems` -> Puts it back on the Marketplace Shelf.
+## 🛠 Tech Stack
 
-## 🚀 Getting Started
+* **Blockchain:** Cedra Network (Testnet)
+* **Smart Contract:** Move Language (Cedra Framework)
+* **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS
+* **Storage:** IPFS (Pinata)
+* **SDK:** `@cedra-labs/ts-sdk` (Native integration)
 
-### Prerequisites
-* Node.js & npm
-* Petra Wallet (Aptos Devnet)
+---
 
-### Installation
+## ⚙️ Setup & Installation
+
+### 1. Clone the Repo
 ```bash
-# 1. Clone the repo
-git clone https://github.com/Utkarshpandey0001/CedraMarket.git
-
-# 2. Install dependencies
-cd frontend
+git clone [https://github.com/Utkarshpandey0001/CedraMarket.git](https://github.com/Utkarshpandey0001/CedraMarket.git)
+cd CedraMarket
 npm install
-
-# 3. Setup Environment
-# Create a .env file in frontend folderand add your Pinata JWT and Module address 
-echo "NEXT_PUBLIC_PINATA_JWT=your_pinata_key_here" > .env
-echo "NEXT_PUBLIC_MODULE_ADDRESS = "0x2af00cec9331ad1402032cf0612b904ed51eb2d7c401e38011c7e6b08cffc8f8" 
-# 4. Run the app
 npm run dev
